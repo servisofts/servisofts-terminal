@@ -15,7 +15,8 @@
     "url": "https://github.com/servisofts/servisofts-terminal.git"
   },
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
