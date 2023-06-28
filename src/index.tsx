@@ -19,7 +19,8 @@ export default class STerminal extends Component<STerminalPropsType> {
         super(props);
         this.state = {
             lastEvent: "enter", //enter
-            value: `Last login: ${new Date().toString()}\n`,
+            // value: `Last login: ${new Date().toString()}\n`,
+            value: ``,
             height: null,
             indexProtected: 0,
             curPosition: 0,
@@ -39,7 +40,6 @@ export default class STerminal extends Component<STerminalPropsType> {
             this.state.value += this.props.startCommand + "\n";
             this.onPressEnter();
         }
-
     }
 
     print(val) {
@@ -231,8 +231,6 @@ export default class STerminal extends Component<STerminalPropsType> {
     }
     render() {
         this.commands = { ...DefaultCommands, ...this.props.commands };
-        console.log(this.props)
-        console.log(this.commands)
         return (
             <View style={{
                 width: "100%",
