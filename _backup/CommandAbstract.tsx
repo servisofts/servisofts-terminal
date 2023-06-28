@@ -6,6 +6,6 @@ export default abstract class CommandAbstract {
     constructor(terminal: STerminal) {
         this.terminal = terminal;
     }
-    abstract execute(props: String[]): String;
+    abstract execute(props: String[], resolve, reject): String;
 }
 
