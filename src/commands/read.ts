@@ -2,7 +2,11 @@ import CommandAbstract from "../CommandAbstract";
 
 export default class read extends CommandAbstract {
     execute(props: any) {
-        
-        return ""
+        this.terminal.inp.read({ promp: props[2] ?? "" }).then(resp => {
+            this.resolve(resp);
+        }).catch(e => {
+            this.reject(e);
+        })
+        return null;
     }
 }

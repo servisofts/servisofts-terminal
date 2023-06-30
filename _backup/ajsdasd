@@ -1,0 +1,39 @@
+   case "ArrowUp":
+                this.preventDefault(e);
+
+                if (this.state.historyIndex + 1 > this.props.terminal.state.history.length) {
+                    return;
+                }
+                if (this.state.historyIndex == 0) {
+                    this.state.saveValue = this.state.value;
+                    console.log("guardoando")
+                }
+                this.state.historyIndex++;
+                index = this.props.terminal.state.history.length - this.state.historyIndex;
+                if (!this.props.terminal.state.history[index]) {
+                    this.state.historyIndex--;
+                    return;
+                };
+                this.setState({ value: this.props.terminal.state.history[index] })
+                break;
+            case "ArrowDown":
+                this.preventDefault(e);
+                if (this.state.historyIndex - 1 < 0) {
+                    this.state.value = this.state.saveValue;
+                    this.state.saveValue = "";
+                    this.setState({ value: this.state.saveValue })
+                    return;
+                }
+                if (this.state.saveValue && this.state.historyIndex <= 0) {
+                    this.state.saveValue = "";
+                    this.setState({ value: this.state.saveValue })
+                    return;
+                }
+                this.state.historyIndex--;
+                index = this.props.terminal.state.history.length - this.state.historyIndex;
+                if (!this.props.terminal.state.history[index]) {
+                    // this.state.historyIndex++;
+                    return;
+                };
+                this.setState({ value: this.props.terminal.state.history[index] })
+                break;
