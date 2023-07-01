@@ -62,12 +62,7 @@ export default class Input extends Component<PropsType> {
                 if (opts.length <= 0) return;
                 else if (opts.length == 1) {
                     if (this.state.value.indexOf(opts[0] + " ") > -1) {
-                        // this.setState({ value: opts[0]+" " })
                         this.autocompleteFile("");
-                        // this.props.terminal.execute("ls").then(e => {
-                        //     console.log("ASdsad")
-                        // })
-                        // this.props.terminal.fileSystem.autoComplete(this.state.value);
                         return;
                     }
                     this.setState({ value: opts[0] + " " })
@@ -94,6 +89,9 @@ export default class Input extends Component<PropsType> {
                     this.preventDefault(e)
                     this.newLine();
                 }
+                break;
+            case "Enter":
+                this.handleOnChangeText(this.state.promp + this.state.value + "\n\n");
                 break;
             case "Tab":
                 this.handleOnKeyPress_Tab(e);
@@ -141,6 +139,7 @@ export default class Input extends Component<PropsType> {
 
     }
     handleOnChangeText = (cmd: string) => {
+        // console.log("handleOnChangeText", cmd)
         if (!cmd.startsWith(this.state.promp)) {
             cmd = this.state.promp + this.state.value;
         }
@@ -224,6 +223,9 @@ export default class Input extends Component<PropsType> {
                 multiline={true}
                 selection={this.state.selection}
                 onKeyPress={this.handleOnKeyPress.bind(this)}
+                onSubmitEditing={() => {
+                    console.log("onSubmitEditing");
+                }}
                 onChangeText={this.handleOnChangeText.bind(this)}
                 onContentSizeChange={(event) => {
                     this.setState({ height: event.nativeEvent.contentSize.height })

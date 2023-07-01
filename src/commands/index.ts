@@ -10,6 +10,10 @@ import mkdir from './mkdir'
 import history from "./history"
 import rm from "./rm"
 import mv from "./mv"
+import cat from "./cat";
+import fs from "./fs"
+import useradd from "./useradd"
+import su from "./su"
 export default {
     clear,
     echo,
@@ -22,5 +26,9 @@ export default {
     mkdir,
     history,
     rm,
-    mv
+    mv,
+    fs,
+    cat,
+    useradd,
+    su
 }

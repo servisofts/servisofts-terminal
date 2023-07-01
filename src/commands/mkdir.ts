@@ -29,6 +29,7 @@ export default class index extends CommandAbstract {
         console.log(name, l, path)
         console.log(l, path)
         new FileSystem.Dir({ name: name, parent: parentNode })
+        this.terminal.fileSystem.save()
         this.resolve("");
         return null;
     }

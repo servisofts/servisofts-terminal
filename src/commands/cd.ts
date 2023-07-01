@@ -9,11 +9,10 @@ export default class index extends CommandAbstract {
         if (obj) {
             if (obj instanceof FileSystem.Dir) {
                 this.terminal.fileSystem.current = obj;
-                this.resolve("");
-                return null;
+                return this.resolve("");
             }
         }
-        return "cd: no such file or directory: " + path;
+        return this.reject("cd: no such file or directory: " + path);
     }
 
 }

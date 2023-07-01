@@ -35,7 +35,6 @@ export default class STerminal extends Component<STerminalPropsType> {
     static defaultProps: STerminalPropsType = {
         commands: {},
         host: "servisofts.com",
-        user: "servisofts",
         style: {
             color: "#ffffff",
             fontFamily: "SF-Mono-Semibold",
@@ -45,6 +44,7 @@ export default class STerminal extends Component<STerminalPropsType> {
 
     }
     state = {
+        user: "root",
         value: "",
         promp: "",
         history: [],
@@ -79,10 +79,7 @@ export default class STerminal extends Component<STerminalPropsType> {
             }
             // this.setState({ ...this.state })
         })
-
     }
-
-
     read({ promp }) {
         return this.inp.read({ promp })
     }
@@ -114,13 +111,21 @@ export default class STerminal extends Component<STerminalPropsType> {
                     let cmd = STerminal.stringToParams(command);
                     const CMD = this.commands[cmd[0] + ""];
                     // console.log("execute ->", command);
-
                     if (CMD) {
-                        let resp = await new CMD(this).executeAsync(cmd).then();
-                        if (!!resp) {
-                            streamResp += resp;
-                            // this.println(resp)
+                        try {
+
+                            let resp = await new CMD(this).executeAsync(cmd).then();
+                            if (!!resp) {
+                                if (streamResp.length > 0) {
+                                    streamResp += "\n";
+                                }
+                                streamResp += resp;
+                                // this.println(resp)
+                            }
+                        } catch (e) {
+                            reject(e)
                         }
+
                     } else {
                         reject("sst: command not found: " + command)
                     }
@@ -140,7 +145,7 @@ export default class STerminal extends Component<STerminalPropsType> {
             onPress={(e) => {
                 this.inp.focus();
             }}>
-            <View style={{ width: "100%", flex: 1, backgroundColor: "#1E1E1E", padding:4, }}>
+            <View style={{ width: "100%", flex: 1, backgroundColor: "#1E1E1E", padding: 4, }}>
                 <ScrollView style={{ flex: 1 }}
                     contentContainerStyle={{
                         minHeight: "100%",
@@ -153,7 +158,7 @@ export default class STerminal extends Component<STerminalPropsType> {
                     <Input
                         ref={ref => this.inp = ref}
                         terminal={this}
-                        promp={`${this.props.user}@${this.props.host} ${this.fileSystem.current.name} % `}
+                        promp={`${this.state.user}@${this.props.host} ${this.fileSystem.current.name} % `}
                     />
                 </ScrollView>
                 <Debuger terminal={this} />

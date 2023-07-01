@@ -24,6 +24,7 @@ export default class index extends CommandAbstract {
             return `rm: cannot remove '${cmd}': Is a  directory`;
         }
         node.delete();
+        this.terminal.fileSystem.save()
         return null;
     }
     error(message) {

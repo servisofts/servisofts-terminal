@@ -45,6 +45,7 @@ export default class index extends CommandAbstract {
             // nodeOrigin.delete();
             nodeOrigin.parent = nodeDestiny;
             nodeDestiny.addChildren(nodeOrigin);
+            this.terminal.fileSystem.save()
         }
 
         console.log(nodeOrigin, nodeDestiny)
