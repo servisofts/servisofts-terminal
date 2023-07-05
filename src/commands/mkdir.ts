@@ -26,9 +26,12 @@ export default class index extends CommandAbstract {
             return "mkdir: no such file or directory: " + path;
         }
 
+        this.terminal.fileSystem.checkPermission(parentNode, this.terminal.state.user, "w");
+
+
         console.log(name, l, path)
         console.log(l, path)
-        new FileSystem.Dir({ name: name, parent: parentNode })
+        new FileSystem.Dir({ name: name, parent: parentNode, prop: this.terminal.state.user, group: this.terminal.state.user })
         this.terminal.fileSystem.save()
         this.resolve("");
         return null;

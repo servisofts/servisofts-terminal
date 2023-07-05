@@ -1,6 +1,6 @@
 {
   "name": "servisofts-terminal",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "servisofts-terminal is a library for React Native Web.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -15,8 +15,7 @@
     "url": "https://github.com/servisofts/servisofts-terminal.git"
   },
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": "*",
     "react-native": "*",

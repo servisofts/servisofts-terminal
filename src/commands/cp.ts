@@ -6,8 +6,7 @@ export default class index extends CommandAbstract {
         let index = 1;
         let cmd = props[index];
         if (!cmd) {
-            this.terminal.println("cp: missing file operand")
-            return null;
+            return this.reject("cp: missing file operand");
         }
         let opts = ""
         if (cmd.startsWith("-")) {
@@ -19,38 +18,36 @@ export default class index extends CommandAbstract {
             index++;
             cmd = props[index];
             if (!cmd) {
-                this.terminal.println("cp: missing file operand")
-                return null;
+                return this.reject("cp: missing file operand");
             }
         }
         let nodeOrigin: any = this.terminal.fileSystem.getNode(cmd);
         if (!nodeOrigin) {
-            return "cp: no such file or directory: " + cmd;
+            return this.reject("cp: no such file or directory: " + cmd);
+            // return "cp: no such file or directory: " + cmd;
         }
-        if (nodeOrigin.type == "d" && opts.indexOf("r") <= -1) {
-            return `cp: cannot move '${cmd}': Is a  directory`;
+        if (nodeOrigin.type == "d" && opts.indexOf("r") <= -1)
+            return this.reject(`cp: cannot move '${cmd}': Is a  directory`); {
+            // return `cp: cannot move '${cmd}': Is a  directory`;
         }
         index++;
         cmd = props[index];
         if (!cmd) {
-            this.terminal.println("cp: missing file operand")
-            return null;
+            return this.reject("cp: missing file operand");
         }
         let nodeDestiny: any = this.terminal.fileSystem.getNode(cmd);
         if (!nodeDestiny) {
-            return "cp: no such file or directory: " + cmd;
+            return this.reject("cp: no such file or directory: " + cmd);
         }
 
+        this.terminal.fileSystem.checkPermission(nodeOrigin, this.terminal.state.user, "w");
+        this.terminal.fileSystem.checkPermission(nodeDestiny, this.terminal.state.user, "w");
         if (nodeDestiny.type == 'd') {
             // nodeOrigin.delete();
             nodeOrigin.parent = nodeDestiny;
             nodeDestiny.addChildren(nodeOrigin);
             this.terminal.fileSystem.save()
         }
-
-        console.log(nodeOrigin, nodeDestiny)
-        console.log(props);
-        this.resolve("");
-        return null;
+        return this.resolve("");
     }
 }

@@ -17,7 +17,6 @@ export default class ANSI extends Component<STextProps> {
             curIndex = position;
             curANSI = match[0];
             let decos = match[1].split(";");
-            console.log(decos);
             decos.map(a => {
                 switch (a) {
                     case '0':

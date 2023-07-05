@@ -14,8 +14,13 @@ import cat from "./cat";
 import fs from "./fs"
 import useradd from "./useradd"
 import su from "./su"
+import chmod from "./chmod"
+import groups from  "./groups"
+import exit from "./exit";
 export default {
     clear,
+    groups,
+    chmod,
     echo,
     help,
     read,
@@ -30,5 +35,6 @@ export default {
     fs,
     cat,
     useradd,
-    su
+    su,
+    exit
 }

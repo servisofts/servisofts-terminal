@@ -8,6 +8,7 @@ export default class index extends CommandAbstract {
         let obj = this.terminal.fileSystem.getNode(path);
         if (obj) {
             if (obj instanceof FileSystem.Dir) {
+                this.terminal.fileSystem.checkPermission(obj, this.terminal.state.user, "r");
                 this.terminal.fileSystem.current = obj;
                 return this.resolve("");
             }

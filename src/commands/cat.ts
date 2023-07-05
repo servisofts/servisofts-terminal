@@ -31,7 +31,7 @@ export default class index extends CommandAbstract {
             this.terminal.read({ promp: "" }).then((resp) => {
                 let existe = this.terminal.fileSystem.getNode(parentPath + name);
                 if (!existe) {
-                    new FileSystem.File({ name: name, parent: nodo }).setValue(resp)
+                    new FileSystem.File({ name: name, parent: nodo, prop: this.terminal.state.user, group: this.terminal.state.user }).setValue(resp)
                     this.terminal.fileSystem.save()
                 } else {
                     if (existe instanceof FileSystem.File) {

@@ -18,19 +18,20 @@ export default class index extends CommandAbstract {
 
         let node: any = this.terminal.fileSystem.getNode(cmd);
         if (!node) {
-            return "rm: no such file or directory: " + cmd;
+            return this.reject("rm: no such file or directory: " + cmd);
         }
         if (node.type == "d" && opts.indexOf("r") <= -1) {
-            return `rm: cannot remove '${cmd}': Is a  directory`;
+            return this.reject(`rm: cannot remove '${cmd}': Is a  directory`);
         }
+
+        this.terminal.fileSystem.checkPermission(node, this.terminal.state.user, "w");
         node.delete();
         this.terminal.fileSystem.save()
-        return null;
+        return this.resolve("");
     }
     error(message) {
         this.terminal.println(message)
         this.terminal.println("Try 'rm --help' for more information.")
-        this.reject(message)
-        return null;
+        return this.reject(message);
     }
 }

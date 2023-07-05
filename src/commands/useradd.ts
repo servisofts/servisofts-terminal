@@ -48,6 +48,7 @@ export default class index extends CommandAbstract {
             let user= props[1];
             passwd.appendLine(`${user}:${user}:0:0:root:/home/${user}:/bin/sst`)
         }
+        this.terminal.fileSystem.save();
         // const opt = props.find((a, i) => a.startsWith("-") ? props.splice(i, 1)[0] : false) ?? ""
         return this.resolve("");
     }

@@ -23,9 +23,11 @@ export type STerminalPropsType = {
         lineHeight?: number,
     }
 }
+
+const STORAGE_NAME_STATE = "termial_state"
 export default class STerminal extends Component<STerminalPropsType> {
     static CommandAbstract = CommandAbstract;
-
+    static FileSystem = FileSystem;
     static stringToParams(cmd: string) {
         cmd = cmd.trim();
         return cmd.split(/\s|\t/g)
@@ -44,7 +46,8 @@ export default class STerminal extends Component<STerminalPropsType> {
 
     }
     state = {
-        user: "root",
+        version: "1.0",
+        user: "",
         value: "",
         promp: "",
         history: [],
@@ -60,35 +63,88 @@ export default class STerminal extends Component<STerminalPropsType> {
     }
 
     componentDidMount(): void {
-        SStorage.getItem("terminal_history", e => {
+
+        SStorage.getItem(STORAGE_NAME_STATE, e => {
             if (e) {
                 try {
                     let data = JSON.parse(e)
-                    this.state.history = data
+                    if (this.state.version != data.version) {
+                        console.log("BOROO POR DIFENTE VERSION")
+                        SStorage.removeItem(STORAGE_NAME_STATE);
+                    } else {
+                        this.state.history = data.history
+                        this.state.user = data.user
+                    }
+
                 } catch (e) {
                     console.log("El objeto no es JSON")
                 }
             }
+
             this.state.load = true;
-            if (this.props.startCommand) {
-                this.execute(this.props.startCommand, false).then(e => {
-                    this.println(e);
-                }).catch(e => {
-                    this.println(e);
-                })
+            if (!this.state.user) {
+                this.runlogin();
+            } else {
+                this.fileSystem.cdToUserDirectory(this.state.user);
+                this.runStartCommands();
             }
             // this.setState({ ...this.state })
         })
+    }
+
+    runlogin() {
+        if (!this.state.load) return;
+
+        this.read({ promp: "Ingrese el usuario:" }).then(e => {
+            // this.setState({ value: "" });
+            this.execute("su " + e).then(resp => {
+
+                this.state.user = e + "";
+                this.fileSystem.cdToUserDirectory(this.state.user);
+                // this.
+                this.state.value = "";
+                this.runStartCommands();
+                this.setState({ ...this.state })
+            }).catch(e => {
+                this.setState({ value: e })
+                this.setState({ user: "" })
+            })
+        }).catch(e => {
+            this.setState({ user: "" })
+            console.error(e);
+        })
+    }
+    runStartCommands() {
+        if (this.props.startCommand) {
+            this.execute(this.props.startCommand, false).then(e => {
+                this.println(e);
+            }).catch(e => {
+                this.println(e);
+            })
+        }
     }
     read({ promp }) {
         return this.inp.read({ promp })
     }
     save() {
         if (!this.state.load) return;
-        SStorage.setItem("terminal_history", JSON.stringify(this.state.history));
+        SStorage.setItem(STORAGE_NAME_STATE, JSON.stringify({
+            version: this.state.version,
+            history: this.state.history,
+            user: this.state.user
+        }));
     }
     println(val) {
         this.state.value += val + "\n";
+        this.setState({ ...this.state })
+    }
+    print(val) {
+        this.state.value += val;
+        this.setState({ ...this.state })
+    }
+    printr(val) {
+        let i = this.state.value.lastIndexOf("\n");
+        this.state.value = this.state.value.substring(0, i + 1) + val;
         this.setState({ ...this.state })
     }
 
@@ -141,6 +197,9 @@ export default class STerminal extends Component<STerminalPropsType> {
     render() {
         this.commands = { ...DefaultCommands, ...this.props.commands };
         this.save();
+        if (!this.state.user) {
+            this.runlogin();
+        }
         return <TouchableWithoutFeedback
             onPress={(e) => {
                 this.inp.focus();

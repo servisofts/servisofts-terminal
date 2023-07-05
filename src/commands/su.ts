@@ -40,7 +40,6 @@ For more details see su(1).
         passwd.split("\n").map((a) => {
             if (a.trim().startsWith("#")) return;
             let userProps = a.trim().split(":");
-            console.log(userProps);
             if (userProps[0] != user) return;
             userPassWd = userProps;
         })
@@ -54,6 +53,7 @@ For more details see su(1).
             if (userPassWd[1] != password) {
                 this.reject("su: Authentication failure");
             }
+            // console.log(userPassWd);
             this.terminal.setState({ user: user })
             this.resolve("");
 
