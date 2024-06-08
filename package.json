@@ -26,7 +26,7 @@
     "@types/react": "^17.0.17",
     "@types/react-native": "^0.61.17",
     "typescript": "^4.1.3",
-    "servisofts-component": "file:../servisofts-component/dist"
+    "servisofts-component": "3.0.30"
   },
   "scripts": {
     "up": "npm run build && cd dist && npm publish",

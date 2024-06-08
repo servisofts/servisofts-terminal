@@ -47,7 +47,7 @@ export default class STerminal extends Component<STerminalPropsType> {
     }
     state = {
         version: "1.0",
-        user: "",
+        user: this.props.user,
         value: "",
         promp: "",
         history: [],
